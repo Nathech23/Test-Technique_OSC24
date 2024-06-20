@@ -1,0 +1,94 @@
+**Temperature and Humidity Monitoring System**
+
+**Hardware Requirements:**
+
+* Arduino Board (e.g., Arduino Uno)
+* DHT11 Temperature and Humidity Sensor
+* Bi-color LEDs (Red and Green)
+* Breadboard and Jumper Wires
+
+**Software Requirements:**
+
+* Arduino IDE
+
+**Algorithm:**
+
+**1. Initialization**
+
+* Initialize the DHT11 sensor
+* Define constants for bi-color LED1 pins (Red and Green)
+* Define constants for bi-color LED2 pins (Red and Green)
+* Set pin modes for bi-color LEDs pins as OUTPUT
+
+**2. Read Temperature and Humidity Values**
+
+* Read temperature value from DHT11 sensor
+* Read humidity value from DHT11 sensor
+
+**3. Control Bi-color LED1 (Temperature)**
+
+* If temperature value is above 30°C:
+	+ Set bi-color LED1 to Red (set Red leg high, Green leg low)
+* Else:
+	+ Set bi-color LED1 to Green (set Green leg high, Red leg low)
+
+**4. Control Bi-color LED2 (Humidity)**
+
+*  If temperature value is above 30°C:
+	+ Set bi-color LED2 to Red (set Red leg high, Green leg low)
+* Else:
+	+ Set bi-color LED2 to Green (set Green leg high, Red leg low)
+
+**5. Repeat**
+
+* Repeat steps 2-4 indefinitely
+
+**Arduino Code:**
+```c
+#include <DHT.h>
+
+// Define constants for bi-color LED pins
+const int LED1_RED_PIN = 9;  // Red leg of bi-color LED
+const int LED1_GREEN_PIN = 10;  // Green leg of bi-color LED
+
+const int LED2_PIN = 11;  // Single LED for humidity
+
+DHT dht;
+
+void setup() {
+  // Initialize DHT11 sensor
+  dht.begin();
+
+  // Set pin modes for bi-color LED pins and single LED pin
+  pinMode(LED1_RED_PIN, OUTPUT);
+  pinMode(LED1_GREEN_PIN, OUTPUT);
+  pinMode(LED2_RED_PIN, OUTPUT);
+  pinMode(LED2_GREEN_PIN, OUTPUT);
+}
+
+void loop() {
+  // Read temperature and humidity values from DHT11 sensor
+  float temperature = dht.readTemperature();
+  float humidity = dht.readHumidity();
+
+  // Control bi-color LED (Temperature)
+  if (temperature > 30) {
+    digitalWrite(LED1_RED_PIN, HIGH);
+    digitalWrite(LED1_GREEN_PIN, LOW);
+  } else {
+    digitalWrite(LED1_RED_PIN, LOW);
+    digitalWrite(LED1_GREEN_PIN, HIGH);
+  }
+
+  // Control single LED (Humidity)
+  if (humidity > 50) {
+    digitalWrite(LED2_RED_PIN, HIGH);
+    digitalWrite(LED2_GREEN_PIN, LOW);
+  } else {
+    digitalWrite(LED2_RED_PIN, LOW);
+    digitalWrite(LED2_GREEN_PIN, HIGH);
+  }
+
+  // Wait for 1 second before taking the next reading
+  delay(1000);
+}
